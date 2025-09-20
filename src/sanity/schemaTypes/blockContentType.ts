@@ -31,14 +31,20 @@ export const blockContentType = defineType({
         {title: 'H4', value: 'h4'},
         {title: 'Quote', value: 'blockquote'},
       ],
-      lists: [{title: 'Bullet', value: 'bullet'}],
+      lists: [
+        {title: 'Bullet', value: 'bullet'},
+        {title: 'Numbered', value: 'number'},
+      ],
       // Marks let you mark up inline text in the Portable Text Editor
       marks: {
         // Decorators usually describe a single property – e.g. a typographic
         // preference or highlighting
         decorators: [
-          {title: 'Strong', value: 'strong'},
-          {title: 'Emphasis', value: 'em'},
+          { title: 'Strong', value: 'strong'},
+          { title: 'Emphasis', value: 'em'},
+          { title: "Inline code", value: "code" },
+          { title: "Underline", value: "underline" },
+          { title: "Strike", value: "strike-through" },
         ],
         // Annotations can be any object structure – e.g. a link or a footnote.
         annotations: [
@@ -71,6 +77,35 @@ export const blockContentType = defineType({
           title: 'Alternative Text',
         }
       ]
+    }),
+    defineArrayMember({
+      type: "code",
+      title: "Code Block",
+      options: {
+        language: "javascript", // дефолт
+        withFilename: true,     // можно добавлять название файла
+      },
+    }),
+    defineArrayMember({
+      type: "object",
+      name: "callout",
+      title: "Callout",
+      fields: [
+        { name: "icon", type: "string", title: "Emoji Icon" },
+        { name: "text", type: "text", title: "Text" },
+        {
+          name: "tone",
+          type: "string",
+          title: "Tone",
+          options: {
+            list: [
+              { title: "Info", value: "info" },
+              { title: "Warning", value: "warning" },
+              { title: "Success", value: "success" },
+            ],
+          },
+        },
+      ],
     }),
   ],
 })

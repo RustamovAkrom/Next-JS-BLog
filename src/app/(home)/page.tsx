@@ -16,10 +16,15 @@ import {
   SelectItem,
 } from "@/components/ui/select"
 
+import type { PostType } from "@/types/post"
+import type { CategoryType } from "@/types/category"
+
 // Загружаем посты
-async function fetchPosts(limit = 6, category?: string) {
+async function fetchPosts(limit = 6, category?: string): Promise<PostType[]> {
   const query = `
-    *[_type == "post" ${category ? `&& category->title == "${category}"` : ""}]
+    *[_type == "post" ${
+      category ? `&& "${category}" in categories[]->title` : ""
+    }]
     | order(publishedAt desc)[0...${limit}]{
       title,
       "slug": slug.current,
@@ -27,21 +32,21 @@ async function fetchPosts(limit = 6, category?: string) {
       publishedAt,
       "mainImage": mainImage.asset->url,
       "author": author->{name, "image": image.asset->url},
-      category-> {title}
+      categories[]->{title}
     }
   `
   return client.fetch(query)
 }
 
 // Загружаем категории
-async function fetchCategories() {
+async function fetchCategories(): Promise<CategoryType[]> {
   const query = `*[_type == "category"]{title}`
   return client.fetch(query)
 }
 
 export default function HomePage() {
-  const [posts, setPosts] = useState<any[]>([])
-  const [categories, setCategories] = useState<any[]>([])
+  const [posts, setPosts] = useState<PostType[]>([])
+  const [categories, setCategories] = useState<CategoryType[]>([])
   const [limit, setLimit] = useState(6)
   const [loading, setLoading] = useState(false)
   const [search, setSearch] = useState("")
@@ -66,7 +71,9 @@ export default function HomePage() {
     (post) =>
       post.title.toLowerCase().includes(search.toLowerCase()) ||
       post.excerpt?.toLowerCase().includes(search.toLowerCase()) ||
-      post.category?.title?.toLowerCase().includes(search.toLowerCase())
+      post.categories?.some((cat) =>
+        cat.title.toLowerCase().includes(search.toLowerCase())
+      )
   )
 
   return (
