@@ -1,70 +1,65 @@
-// app/post/[slug]/page.tsx
-import { client } from "@/sanity/lib/client"
-import { Separator } from "@/components/ui/separator"
-import Image from "next/image"
+"use client";
 
-import PostAuthor from "@/components/PostAuthor"
-import PostCategories from "@/components/PostCategories"
-import PostContent from "@/components/PostContent"
-import ShareButtons from "@/components/ShareButtons"
-import PostCard from "@/components/PostCard"
-import { PostType, RelatedPostType } from "@/types/post"
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
-// Типы
-type PostPageProps = {
-  params: {
-    slug: string
-  }
-}
+import PostAuthor from "@/components/PostAuthor";
+import PostCategories from "@/components/PostCategories";
+import PostContent from "@/components/PostContent";
+import ShareButtons from "@/components/ShareButtons";
+import PostCard from "@/components/PostCard";
+import { PostType, RelatedPostType } from "@/types/post";
 
-// Запрос поста
-async function getPost(slug: string): Promise<PostType | null> {
-  return client.fetch(
-    `*[_type == "post" && slug.current == $slug][0]{
-      title,
-      body,
-      "mainImage": mainImage.asset->url,
-      "author": author->{name, "image": image.asset->url},
-      publishedAt,
-      categories[]->{title, "slug": slug.current}
-    }`,
-    { slug }
-  )
-}
+export default function PostPage() {
+  const params = useParams();
+  const slug = params?.slug as string; // ✅ теперь TypeScript видит что slug может быть undefined
+  const [post, setPost] = useState<PostType | null>(null);
+  const [related, setRelated] = useState<RelatedPostType[]>([]);
+  const [loading, setLoading] = useState(true);
 
-// Запрос связанных постов
-async function getRelatedPosts(
-  category: string,
-  slug: string
-): Promise<RelatedPostType[]> {
-  return client.fetch(
-    `*[_type == "post" && references(*[_type == "category" && title == $category]._id) && slug.current != $slug][0...3]{
-      title,
-      "slug": slug.current,
-      "mainImage": mainImage.asset->url,
-      publishedAt
-    }`,
-    { category, slug }
-  )
-}
+  useEffect(() => {
+    if (!slug || typeof slug !== "string") return; // ✅ проверка на undefined
 
-// Страница поста
-export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = params
-  const post = await getPost(slug)
+    const fetchData = async () => {
+      try {
+        setLoading(true);
 
-  if (!post) {
+        // Fetch post
+        const postRes = await fetch(`/api/posts/${slug}`);
+        if (!postRes.ok) throw new Error("Failed to fetch post");
+        const postData: PostType = await postRes.json();
+        setPost(postData);
+
+        // Fetch related posts
+        if (postData.categories?.length) {
+          const cat = postData.categories[0].title;
+          const relatedRes = await fetch(
+            `/api/posts/related?category=${encodeURIComponent(cat)}&slug=${encodeURIComponent(slug)}`
+          );
+          if (!relatedRes.ok) throw new Error("Failed to fetch related posts");
+          const relatedData: RelatedPostType[] = await relatedRes.json();
+          setRelated(relatedData);
+        }
+
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [slug]);
+
+  if (loading) return <p className="text-center py-20">Loading...</p>;
+  if (!post)
     return (
       <p className="text-center text-muted-foreground py-20 text-lg">
         Post not found 🥲
       </p>
-    )
-  }
-
-  const related =
-    post.categories?.length > 0
-      ? await getRelatedPosts(post.categories[0].title, slug)
-      : []
+    );
 
   return (
     <div className="container max-w-3xl mx-auto px-4 py-12">
@@ -102,5 +97,5 @@ export default async function PostPage({ params }: PostPageProps) {
         </div>
       )}
     </div>
-  )
+  );
 }
