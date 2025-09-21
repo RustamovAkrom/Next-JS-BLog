@@ -4,7 +4,7 @@ export const siteConfig = {
   navLinks: [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
+    { label: "Contact", href: "https://akrom-omega.vercel.app/contact" },
   ],
   social: [
     { label: "GitHub", href: "https://github.com/RustamovAkrom" },

@@ -1,15 +1,22 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import Prism from "prismjs"
+import "prismjs/themes/prism-tomorrow.css" // тёмная тема
+import "prismjs/components/prism-jsx" // язык, если нужен
 
-export default function CodeBlock({
-  code,
-  filename,
-}: {
+interface CodeBlockProps {
   code: string
+  language?: string
   filename?: string
-}) {
+}
+
+export default function CodeBlock({ code, language = "javascript", filename }: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    Prism.highlightAll()
+  }, [code])
 
   const handleCopy = async () => {
     try {
@@ -17,12 +24,12 @@ export default function CodeBlock({
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
-      console.error("Failed to copy code:", err)
+      console.error(err)
     }
   }
 
   return (
-    <div className="my-6 border border-zinc-300 dark:border-zinc-800 rounded-md overflow-hidden shadow-sm">
+    <div className="my-6 border border-zinc-300 dark:border-zinc-800 rounded-lg overflow-hidden shadow-lg relative">
       {filename && (
         <div className="bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 px-3 py-1 text-xs font-mono flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800">
           <span>{filename}</span>
@@ -34,10 +41,9 @@ export default function CodeBlock({
           </button>
         </div>
       )}
-      <pre className="bg-zinc-50 dark:bg-zinc-800 text-sm p-4 overflow-x-auto font-mono text-zinc-800 dark:text-zinc-100">
-        <code>{code}</code>
+      <pre className="p-4 overflow-x-auto text-sm font-mono">
+        <code className={`language-${language}`}>{code}</code>
       </pre>
     </div>
-
   )
 }
