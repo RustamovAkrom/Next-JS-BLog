@@ -70,7 +70,7 @@ export default function HomePage() {
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(search.toLowerCase()) ||
-      post.excerpt?.toLowerCase().includes(search.toLowerCase()) ||
+      // post.excerpt?.toLowerCase().includes(search.toLowerCase()) ||
       post.categories?.some((cat) =>
         cat.title.toLowerCase().includes(search.toLowerCase())
       )
@@ -117,7 +117,7 @@ export default function HomePage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
-              {categories.map((cat) => (
+              {categories.map((cat: CategoryType) => (
                 <SelectItem key={cat.title} value={cat.title}>
                   {cat.title}
                 </SelectItem>
@@ -130,7 +130,7 @@ export default function HomePage() {
           <p className="text-muted-foreground">No posts found.</p>
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredPosts.map((post) => (
+            {filteredPosts.map((post: PostType) => (
               <Link
                 key={post.slug}
                 href={`/post/${post.slug}`}

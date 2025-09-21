@@ -1,10 +1,12 @@
 "use client"
 
 import { PortableText } from "@portabletext/react"
+import type { PortableTextBlock } from "@portabletext/react"
+
 import Image from "next/image"
 import CodeBlock from "./CodeBlock"
 
-export default function PostContent({ body }: { body: any }) {
+export default function PostContent({ body }: { body: PortableTextBlock[]  }) {
   return (
     <article className="prose dark:prose-invert max-w-none leading-relaxed">
       <PortableText
