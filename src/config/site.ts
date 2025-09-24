@@ -3,8 +3,9 @@ export const siteConfig = {
   description: "Akrom Rustamov — portfolio & blog",
   navLinks: [
     { label: "Home", href: "/" },
+    { label: "Posts", href: "/posts" },
     { label: "About", href: "/about" },
-    { label: "Contact", href: "https://akrom-omega.vercel.app/contact" },
+    { label: "Contact", href: "/contact" },
   ],
   social: [
     { label: "GitHub", href: "https://github.com/RustamovAkrom" },

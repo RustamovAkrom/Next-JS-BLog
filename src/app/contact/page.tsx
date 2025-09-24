@@ -1,108 +1,33 @@
 "use client"
 
-import { useState } from "react"
-import { contactInfo } from "@/config/contact"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
+import { FaTelegramPlane } from "react-icons/fa"
 import Link from "next/link"
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" })
-  const [submitted, setSubmitted] = useState(false)
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Здесь можно подключить API (например, email сервис, Telegram-бот, backend Django)
-    console.log("Form submitted:", form)
-    setSubmitted(true)
-  }
-
   return (
-    <div className="container max-w-3xl mx-auto px-4 py-12 space-y-12">
+    <div className="container max-w-3xl mx-auto px-4 py-16 flex flex-col items-center text-center space-y-8">
       {/* Заголовок */}
-      <section className="text-center space-y-4">
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-          Contact <span className="text-indigo-500">Me</span>
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Have a question, proposal, or just want to say hi? Drop me a message 👇
-        </p>
-      </section>
+      <h1 className="text-4xl font-bold tracking-tight">
+        Get in <span className="text-indigo-500">Touch</span>
+      </h1>
+      <p className="text-gray-600 dark:text-gray-400 max-w-lg">
+        I&apos;m always open to collaboration, discussions, or just a friendly chat.  
+        The fastest way to reach me is through Telegram.
+      </p>
 
-      {/* Контакты */}
-      <section className="grid gap-4 sm:grid-cols-2">
-        {contactInfo.map((item) => (
-          <div
-            key={item.label}
-            className="border rounded-xl p-4 text-center sm:text-left"
-          >
-            <h3 className="font-semibold">{item.label}</h3>
-            {item.href ? (
-              <Link
-                href={item.href}
-                target="_blank"
-                className="text-indigo-500 hover:underline"
-              >
-                {item.value}
-              </Link>
-            ) : (
-              <p>{item.value}</p>
-            )}
-          </div>
-        ))}
-      </section>
-
-      {/* Форма */}
-      <section>
-        {submitted ? (
-          <div className="p-6 text-center bg-green-100 dark:bg-green-800 rounded-xl">
-            <h3 className="text-lg font-semibold">✅ Thank you!</h3>
-            <p className="text-muted-foreground">
-              Your message has been sent successfully.
-            </p>
-          </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-4 border rounded-xl p-6 shadow-sm"
-          >
-            <Input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              value={form.name}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-            <Textarea
-              name="message"
-              placeholder="Your Message"
-              value={form.message}
-              onChange={handleChange}
-              required
-              rows={5}
-            />
-            <Button type="submit" className="w-full">
-              Send Message
-            </Button>
-          </form>
-        )}
-      </section>
+      {/* Контакт-карта */}
+      <div className="bg-black/5 dark:bg-white/5 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xl p-8 w-full sm:w-[400px] flex flex-col items-center space-y-4 hover:shadow-2xl transition duration-300">
+        <FaTelegramPlane className="w-12 h-12 text-indigo-500 animate-bounce" />
+        <h2 className="text-xl font-semibold">Chat with me on Telegram</h2>
+        <p className="text-gray-500">@Akrom_Rustamov</p>
+        <Link
+          href="https://t.me/Akrom_Rustamov"
+          target="_blank"
+          className="px-6 py-3 rounded-xl bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition"
+        >
+          Open Telegram
+        </Link>
+      </div>
     </div>
   )
 }

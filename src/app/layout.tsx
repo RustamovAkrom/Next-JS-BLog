@@ -1,5 +1,5 @@
 // app/layout.tsx
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Header";
@@ -15,6 +15,14 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// 👉 ВОТ ЭТО ВЫНОСИМ В ОТДЕЛЬНЫЙ viewport
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
+};
 
 // Профессиональный metadata для сайта
 export const metadata: Metadata = {
@@ -58,7 +66,7 @@ export const metadata: Metadata = {
     title: "My Blog App",
     description:
       "Discover insightful articles, useful tips, and inspiring stories on the My Blog App.",
-    creator: "@AkromDev01", // твой Twitter handle
+    creator: "@AkromDev01",
     images: ["https://akromblogdev.vercel.app/metadata-logo.webp"],
   },
   icons: {
@@ -66,10 +74,6 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-  ],
 };
 
 export default function RootLayout({
@@ -80,9 +84,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <Navbar />
-          <main className="container min-h-screen py-6 max-w-7xl mx-auto">{children}</main>
+          <main className="container min-h-screen py-6 max-w-7xl mx-auto">
+            {children}
+          </main>
           <Footer />
         </ThemeProvider>
       </body>

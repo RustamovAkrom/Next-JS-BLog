@@ -4,11 +4,25 @@ import { AboutDataType } from "@/types/about"
 export const aboutData: AboutDataType = {
   name: "Akrom",
   role: "Backend & Fullstack Developer",
-  image: "/about.jpg", // загрузи в public/
+  image: "/about.jpg", // помести файл в public/
   description: [
     "I am a Backend developer with experience in Python and Django.",
     "Currently exploring frontend frameworks like React to enhance my projects.",
     "My goal is to build modern, scalable, and user-friendly applications."
+  ],
+  skills: [
+    "Python & Django",
+    "Django REST Framework (DRF)",
+    "PostgreSQL & MySQL",
+    "React & Next.js",
+    "TypeScript",
+    "Git & GitHub",
+  ],
+  experience: [
+    "1+ year of Backend development with Django",
+    "Built scalable REST APIs with DRF",
+    "Integrated AI into Telegram bots",
+    "Exploring Fullstack with React + Next.js",
   ],
   socials: [
     {

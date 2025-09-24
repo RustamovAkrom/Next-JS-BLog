@@ -41,9 +41,17 @@ export default function CodeBlock({ code, language = "javascript", filename }: C
           </button>
         </div>
       )}
-      <pre className="p-4 overflow-x-auto text-sm font-mono">
-        <code className={`language-${language}`}>{code}</code>
+
+      <pre
+        className={`p-4 overflow-x-auto text-sm font-mono ${language ? `language-${language}` : ""}`}
+        tabIndex={0}
+      >
+        <code className={language ? `language-${language}` : ""}>
+          {code}
+        </code>
       </pre>
+
+
     </div>
   )
 }
