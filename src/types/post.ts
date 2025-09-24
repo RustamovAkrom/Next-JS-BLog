@@ -29,3 +29,8 @@ export interface RelatedPostType {
   mainImage?: string;
   publishedAt: string;
 };
+
+export type PostPageProps = {
+  post: PostType;
+  related: RelatedPostType[];
+};

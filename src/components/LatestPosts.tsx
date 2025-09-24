@@ -3,39 +3,62 @@
 import Link from "next/link";
 import Image from "next/image";
 import { PostType } from "@/types/post";
-
+import { motion, Variants } from "framer-motion";
 
 type Props = { posts: PostType[] };
 
 export default function LatestPosts({ posts }: Props) {
   if (!posts.length) return <p className="text-muted-foreground">Нет статей.</p>;
 
+  const containerVariants: Variants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.15, // небольшая задержка между карточками
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  };
+
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <motion.div
+      className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {posts.map((post) => (
-        <Link
-          key={post._id}
-          href={`/post/${post.slug}`}
-          className="group block overflow-hidden rounded-xl border bg-background transition hover:shadow-xl"
-        >
-          {post.mainImage && (
-            <div className="relative w-full h-48 bg-muted">
-              <Image
-                src={post.mainImage}
-                alt={post.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          )}
-          <div className="p-4 space-y-2">
-            <h3 className="text-lg font-semibold line-clamp-2">{post.title}</h3>
-            {post.excerpt && (
-              <p className="text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
+        <motion.div key={post.slug} variants={itemVariants}>
+          <Link
+            href={`/post/${post.slug}`}
+            className="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer transform transition hover:scale-105 hover:shadow-2xl"
+          >
+            {/* Фоновая картинка */}
+            {post.mainImage && (
+              <div className="relative w-full aspect-[16/9]">
+                <Image
+                  src={post.mainImage}
+                  alt={post.title}
+                  fill
+                  className="object-cover object-center transition-transform duration-300 group-hover:scale-110"
+                />
+                {/* Градиент для читаемости текста */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              </div>
             )}
-          </div>
-        </Link>
+
+            {/* Текст поверх картинки */}
+            <div className="absolute bottom-4 left-4 right-4 text-white">
+              <h3 className="text-lg font-bold line-clamp-2">{post.title}</h3>
+              {post.excerpt && <p className="text-sm line-clamp-2 mt-1">{post.excerpt}</p>}
+            </div>
+          </Link>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }

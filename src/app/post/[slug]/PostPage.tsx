@@ -8,14 +8,9 @@ import PostCategories from "@/components/PostCategories";
 import PostContent from "@/components/PostContent";
 import ShareButtons from "@/components/ShareButtons";
 import PostCard from "@/components/PostCard";
-import { PostType, RelatedPostType } from "@/types/post";
+import type { PostPageProps } from "@/types/post";
 import { Eye } from "lucide-react";
 
-
-type PostPageProps = {
-  post: PostType;
-  related: RelatedPostType[];
-};
 
 export default function PostPage({ post, related }: PostPageProps) {
   const [views, setViews] = useState<number>(post.views ?? 0);

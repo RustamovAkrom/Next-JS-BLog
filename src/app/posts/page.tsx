@@ -14,6 +14,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { motion, Variants } from "framer-motion";
 
 import type { PostType } from "@/types/post";
 import type { CategoryType } from "@/types/category";
@@ -31,6 +32,16 @@ async function fetchCategoriesAPI() {
   if (!res.ok) throw new Error("Failed to fetch categories");
   return res.json();
 }
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
 
 export default function PostsPage() {
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -90,10 +101,8 @@ export default function PostsPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Categories</SelectItem>
-            {categories.map((cat: CategoryType) => (
-              <SelectItem key={cat.title} value={cat.title}>
-                {cat.title}
-              </SelectItem>
+            {categories.map((cat) => (
+              <SelectItem key={cat.title} value={cat.title}>{cat.title}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -103,48 +112,54 @@ export default function PostsPage() {
       {filteredPosts.length === 0 ? (
         <p className="text-muted-foreground">No posts found.</p>
       ) : (
-        <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredPosts.map((post: PostType) => (
-            <Link
-              key={post.slug}
-              href={`/post/${post.slug}`}
-              className="group block overflow-hidden rounded-xl border bg-background transition hover:shadow-xl"
-            >
-              <div className="relative w-full h-48 bg-muted">
-                {post.mainImage && (
-                  <Image
-                    src={post.mainImage}
-                    alt={post.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                )}
-              </div>
-              <CardContent className="p-5 space-y-3">
-                <h3 className="text-lg font-semibold line-clamp-2 group-hover:text-primary transition-colors">
-                  {post.title}
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  {post.publishedAt
-                    ? format(new Date(post.publishedAt), "dd MMM yyyy")
-                    : ""}
-                </p>
-                {post.excerpt && (
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {post.excerpt}
-                  </p>
-                )}
-              </CardContent>
-            </Link>
+        <motion.div
+          className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {filteredPosts.map((post) => (
+            <motion.div key={post.slug} variants={itemVariants}>
+              <Link
+                href={`/post/${post.slug}`}
+                className="group block relative overflow-hidden rounded-xl shadow-lg cursor-pointer transform transition hover:scale-105 hover:shadow-2xl"
+              >
+                <div className="relative w-full aspect-[16/9] bg-muted">
+                  {post.mainImage && (
+                    <Image
+                      src={post.mainImage}
+                      alt={post.title}
+                      fill
+                      className="object-cover object-center transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                </div>
+                <CardContent className="p-5 space-y-2 absolute bottom-0 left-0 w-full text-white">
+                  <h3 className="text-lg font-bold line-clamp-2 group-hover:text-primary transition-colors">
+                    {post.title}
+                  </h3>
+                  <p className="text-xs">{post.publishedAt ? format(new Date(post.publishedAt), "dd MMM yyyy") : ""}</p>
+                  {post.excerpt && <p className="text-sm line-clamp-2 mt-1">{post.excerpt}</p>}
+                </CardContent>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
 
-      <div className="flex justify-center mt-10">
-        <Button size="lg" onClick={loadMore} disabled={loading} className="px-8">
-          {loading ? "Loading..." : "Load more"}
-        </Button>
-      </div>
+<div className="flex justify-center mt-10">
+  <Button
+    onClick={loadMore}
+    disabled={loading}
+    className="px-6 py-2 rounded-full border border-primary/30 bg-transparent 
+               text-primary hover:bg-primary/10 hover:border-primary/50 
+               transition-all duration-300 shadow-sm disabled:opacity-50"
+  >
+    {loading ? "Loading..." : "Load more"}
+  </Button>
+</div>
+
     </div>
   );
 }

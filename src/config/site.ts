@@ -1,6 +1,10 @@
 export const siteConfig = {
-  name: "Akrom.Blog",
-  description: "Akrom Rustamov — portfolio & blog",
+  name: "Akrom.Blog", // Logo name
+  title: "Akrom`s Blog",
+  description: "Akrom Rustamov — portfolio & blog. Discover insightful articles, useful tips, and inspiring stories on the My Blog App.",
+  creator: "Akrom Rustamov",
+  public_url: "https://akromblogdev.vercel.app",
+
   navLinks: [
     { label: "Home", href: "/" },
     { label: "Posts", href: "/posts" },
@@ -13,4 +17,7 @@ export const siteConfig = {
     { label: "Telegram", href: "https://t.me/Akrom_Rustamov" },
     { label: "Instagram", href: "https://www.instagram.com/rustamovakromjon327/" },
   ],
+  footerLinks: [
+    
+  ]
 };

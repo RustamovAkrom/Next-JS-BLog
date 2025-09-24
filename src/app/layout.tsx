@@ -5,6 +5,9 @@ import "./globals.css";
 import Navbar from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/providers/theme-provider";
+import PageLoader from "@/components/PageLoader";
+import { siteConfig } from "@/config/site";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,11 +30,10 @@ export const viewport: Viewport = {
 // Профессиональный metadata для сайта
 export const metadata: Metadata = {
   title: {
-    default: "My Blog App",
+    default: siteConfig.name,
     template: "%s | My Blog App",
   },
-  description:
-    "Discover insightful articles, useful tips, and inspiring stories on the My Blog App.",
+  description: siteConfig.description,
   keywords: [
     "blog",
     "technology",
@@ -41,20 +43,19 @@ export const metadata: Metadata = {
     "tutorial",
     "news",
   ],
-  authors: [{ name: "Akrom", url: "https://akrom-omega.vercel.app" }],
-  creator: "Akrom",
+  authors: [{ name: "Akrom", url: siteConfig.public_url }],
+  creator: siteConfig.creator,
   publisher: "My Blog App",
-  metadataBase: new URL("https://akromblogdev.vercel.app"),
+  metadataBase: new URL(siteConfig.public_url),
   openGraph: {
-    title: "My Blog App",
-    description:
-      "Discover insightful articles, useful tips, and inspiring stories on the My Blog App.",
-    url: "https://akromblogdev.vercel.app",
-    siteName: "My Blog App",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.public_url,
+    siteName: siteConfig.name,
     type: "website",
     images: [
       {
-        url: "https://akromblogdev.vercel.app/metadata-logo.webp",
+        url: `${siteConfig.public_url}/metadata-logo.webp`,
         width: 1200,
         height: 630,
         alt: "My Blog App Logo",
@@ -63,16 +64,15 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "My Blog App",
-    description:
-      "Discover insightful articles, useful tips, and inspiring stories on the My Blog App.",
-    creator: "@AkromDev01",
-    images: ["https://akromblogdev.vercel.app/metadata-logo.webp"],
+    title: siteConfig.title,
+    description: siteConfig.description,
+    creator: siteConfig.creator,
+    images: [`${siteConfig.public_url}/metadata-logo.webp`],
   },
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    // shortcut: "/favicon-16x16.png",
+    // apple: "/apple-touch-icon.png",
   },
 };
 
@@ -83,18 +83,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased transition-colors`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <main className="container min-h-screen py-6 max-w-7xl mx-auto">
-            {children}
-          </main>
-          <Footer />
+          <PageLoader>
+
+            <Navbar />
+            <main className="container min-h-screen py-6 max-w-7xl mx-auto">
+              {children}
+            </main>
+            <Footer />
+          </PageLoader>
         </ThemeProvider>
       </body>
     </html>
