@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { client } from "@/sanity/lib/client";
 
 export async function POST(req: NextRequest, { params }: { params: { slug: string } }) {
-  const { slug } = params;
+  const { slug } = await params;
 
   try {
     const post = await client.fetch(

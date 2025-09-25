@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/providers/theme-provider";
 import PageLoader from "@/components/PageLoader";
 import { siteConfig } from "@/config/site";
-
+import ProgressProvider from "@/providers/progress-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -93,7 +93,9 @@ export default function RootLayout({
           <PageLoader>
 
             <Navbar />
-            <main className="container min-h-screen py-6 max-w-7xl mx-auto">
+            <ProgressProvider />
+
+            <main className="min-h-screen py-6 max-w-7xl mx-auto transition-colors">
               {children}
             </main>
             <Footer />

@@ -78,7 +78,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark {
+/* .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -110,6 +110,42 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+} */
+
+.dark {
+  --background: #0d1117; /* фон как GitHub */
+  --foreground: #c9d1d9; /* текст */
+  --card: #161b22; /* карточки */
+  --card-foreground: #c9d1d9;
+  --popover: #161b22;
+  --popover-foreground: #c9d1d9;
+
+  --primary: #58a6ff; /* ссылки/акцент GitHub */
+  --primary-foreground: #ffffff;
+
+  --secondary: #21262d; /* вторичный фон */
+  --secondary-foreground: #c9d1d9;
+
+  --muted: #21262d;
+  --muted-foreground: #8b949e;
+
+  --accent: #1f6feb;
+  --accent-foreground: #ffffff;
+
+  --destructive: #f85149; /* ошибки красные */
+  --border: #30363d;
+  --input: #30363d;
+  --ring: #58a6ff;
+
+  /* сайдбар, если нужен */
+  --sidebar: #161b22;
+  --sidebar-foreground: #c9d1d9;
+  --sidebar-primary: #1f6feb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #21262d;
+  --sidebar-accent-foreground: #c9d1d9;
+  --sidebar-border: #30363d;
+  --sidebar-ring: #58a6ff;
 }
 
 @layer base {
@@ -119,4 +155,13 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+#nprogress .bar {
+  background: #58a6ff !important; /* GitHub blue */
+  height: 3px !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #58a6ff, 0 0 5px #58a6ff !important;
 }
